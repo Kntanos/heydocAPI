@@ -1,44 +1,18 @@
 const { response } = require('express');
 const express = require('express');
+const getData = require('../src/lib/getData');
 const router = express.Router();
+const getToken = require('../src/lib/getToken');
+const getData = require('../src/lib/getData');
+const calcWaitingTime = require('../src/lib/calcWaitingTime');
 
 router.get('/', (req, res, next) => {
-
-  // try getting data with existing token
-
-  //catch (if token not valid) request new token, then get data
-  url = 'https://open.heydoc.co.uk/graphql'
-  data = `{"query":"mutation {\n signIn (apiKey: ${process.env.API_KEY}, password: ${process.env.ACCOUNT_PASSWORD})\n {\n token\n }\n}"}`
-
-  const getToken = async (url, data) => {
-    const response = await fetch (url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    });
-    const token = response.json().data.signIn.token
-    console.log(token);
-  }
-  next();
-  return;
+  const TOKEN_ID = getToken()
 });
 
-router.get('/', (req, res, next) => {
-  url = 'https://open.heydoc.co.uk/graphql'
-  
-  const getToken = async (url) => {
-    const response = await fetch (url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    });
-    const waitingTime = response.json()
-    console.log(waitingTime);
-  }
+router.get('/data', (req, res, next) => {
+  const data = await getData();
+  calcWaitingTime(data);
 });
 
 module.exports = router;
