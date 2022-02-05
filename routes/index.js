@@ -27,17 +27,6 @@ const headers = {
 //   }`
 // }
 
-// const graphqlQuery = { query:
-//   `query practice {
-//     practice {
-//       appointmentTypes {
-//         title
-//       }
-//     }
-//   }`
-// }
-
-
 // Pass variable directly in the query
 // const graphqlQuery = { query:
 //   `query patient {
@@ -75,22 +64,38 @@ const headers = {
 //   variables: {dateRange: {start: "2021", end: "2022"}}
 // };
 
+// const graphqlQuery = { query:
+//   `query bookings($dateRange: DateRange) {
+//     bookings(dateRange: $dateRange) {
+//       data {
+//         id
+//         start
+//         patient {
+//           id
+//         }
+//         appointment {
+//           title
+//         }
+//       }
+//     }
+//   }`,
+//   variables: {dateRange: {start: "2021", end: "2022"}}
+// };
+
 const graphqlQuery = { query:
-  `query bookings($dateRange: DateRange) {
-    bookings(dateRange: $dateRange) {
+  `query patients {
+    patients{
       data {
         id
-        start
-        patient {
-          id
-        }
-        appointment {
-          title
+        bookings(start: "2021", end: "2023") {
+          start
+          appointment {
+            title
+          }
         }
       }
     }
-  }`,
-  variables: {dateRange: {start: "2021", end: "2022"}}
+  }`
 };
 
 router.get('/', async (req, res) => {
@@ -101,7 +106,7 @@ router.get('/', async (req, res) => {
       headers: headers,
       data: graphqlQuery
     })
-    console.log(response.data.data.bookings.data)
+    console.log(response.data.data.patients.data[5])
   } catch (error) {
     console.log('error');
   }
