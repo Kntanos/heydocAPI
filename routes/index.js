@@ -49,18 +49,49 @@ const headers = {
 // }
 
 // Pass variables separately in the query for dynamic variables
+// const graphqlQuery = { query:
+//   `query patient($id: ID!) {
+//     patient(id: $id) {
+//       firstName
+//       lastName
+//       bookings (start: "2021", end: "2022") {
+//         id
+//       }
+//     }
+//   }`,
+
+//   variables: { id: "61eafe28532a8000123109c3" }
+// };
+
+// Can get list of booking id's from this, but only if I specify dateRange
+// const graphqlQuery = { query:
+//   `query bookings($dateRange: DateRange) {
+//     bookings(dateRange: $dateRange) {
+//       data {
+//         id
+//       }
+//     }
+//   }`,
+//   variables: {dateRange: {start: "2021", end: "2022"}}
+// };
+
 const graphqlQuery = { query:
-  `query patient($id: ID!) {
-    patient(id: $id) {
-      firstName
-      lastName
+  `query bookings($dateRange: DateRange) {
+    bookings(dateRange: $dateRange) {
+      data {
+        id
+        start
+        patient {
+          id
+        }
+        appointment {
+          title
+        }
+      }
     }
   }`,
-
-  variables: { id: "61eafe28532a8000123109c3" }
+  variables: {dateRange: {start: "2021", end: "2022"}}
 };
-
-
 
 router.get('/', async (req, res) => {
   try {
@@ -70,7 +101,7 @@ router.get('/', async (req, res) => {
       headers: headers,
       data: graphqlQuery
     })
-    console.log(response.data)
+    console.log(response.data.data.bookings.data)
   } catch (error) {
     console.log('error');
   }
