@@ -14,18 +14,53 @@ const axios = require('axios');
 // });
 
 const headers = {
-  "x-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTM3OGU1NzMzNTdlZDAwMTU2NDhhNjIiLCJyb2xlIjoicHJhY3RpdGlvbmVyIiwiaWF0IjoxNjQ0MDA1OTkyLCJleHAiOjE2NDQwNDkxOTJ9.pGChFSWX9NhKcNbqbewuKgX7n1bfpGVBZQyE6LPQlmo"
+  "x-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTM3OGU1NzMzNTdlZDAwMTU2NDhhNjIiLCJyb2xlIjoicHJhY3RpdGlvbmVyIiwiaWF0IjoxNjQ0MDU4NjkxLCJleHAiOjE2NDQxMDE4OTF9.7x40U3ubMtdYOL6vKVAAcN5KDpnlbMCz3XiOXjb8CIQ"
 };
 
+// const graphqlQuery = { query:
+//   `query patients {
+//     patients {
+//       data {
+//         id
+//       }
+//     }
+//   }`
+// }
+
+// const graphqlQuery = { query:
+//   `query practice {
+//     practice {
+//       appointmentTypes {
+//         title
+//       }
+//     }
+//   }`
+// }
+
+
+// Pass variable directly in the query
+// const graphqlQuery = { query:
+//   `query patient {
+//     patient(id: "61eafe28532a8000123109c3") {
+//       firstName
+//       lastName
+//     }
+//   }`
+// }
+
+// Pass variables separately in the query for dynamic variables
 const graphqlQuery = { query:
-  `query patients {
-    patients {
-      data {
-        firstName
-      }
+  `query patient($id: ID!) {
+    patient(id: $id) {
+      firstName
+      lastName
     }
-  }`
-}
+  }`,
+
+  variables: { id: "61eafe28532a8000123109c3" }
+};
+
+
 
 router.get('/', async (req, res) => {
   try {
@@ -35,7 +70,7 @@ router.get('/', async (req, res) => {
       headers: headers,
       data: graphqlQuery
     })
-    console.log(response.data.data.patients.data)
+    console.log(response.data)
   } catch (error) {
     console.log('error');
   }
