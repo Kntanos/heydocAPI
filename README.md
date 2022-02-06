@@ -1,0 +1,1 @@
+Run `DEBUG=heydoc:* npm start` to start the server

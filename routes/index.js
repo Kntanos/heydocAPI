@@ -1,4 +1,3 @@
-const { response } = require('express');
 const express = require('express');
 const callHeydocAPI = require('../src/lib/callHeydocAPI');
 const router = express.Router();
