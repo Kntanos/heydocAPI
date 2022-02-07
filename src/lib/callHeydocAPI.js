@@ -28,7 +28,7 @@ const callHeydocAPI = async (req, res) => {
     })
 
     return response.data.data.patients.data
-  
+
   } catch (error) {
     console.log(error);
   }
